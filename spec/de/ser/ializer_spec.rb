@@ -1,0 +1,185 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe De::Ser::Ializer do
+  let(:order) { TestOrder.init }
+
+  describe 'NamedMethodDeSer' do
+    it 'parses properties correctly' do
+      data = NamedMethodDeSer.serialize(order)
+
+      parsed = NamedMethodDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop
+      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.integer_prop).to   eq order.integer_prop
+      expect(parsed.decimal_prop).to   eq order.decimal_prop
+      expect(parsed.bool_prop).to      eq order.bool_prop
+      expect(parsed.date_prop).to      eq order.date_prop
+      expect(parsed.float_prop).to     eq order.float_prop
+      expect((parsed.timestamp_prop.to_f - order.timestamp_prop.to_f).abs).to be < 1
+      expect((parsed.millis_prop.to_f - order.millis_prop.to_f).abs).to be < 1
+    end
+
+    it 'parses nested object' do
+      order.add_customer
+      data = NamedMethodDeSer.serialize(order)
+
+      parsed = NamedMethodDeSer.parse(data, TestOrder)
+
+      expect(parsed.customer).to be_present
+      expect(parsed.customer).to be_a OpenStruct
+
+      expect(parsed.customer.name).to eq order.customer.name
+      expect(parsed.customer.tele).to eq order.customer.tele
+    end
+
+    it 'parses nested array objects' do
+      order.add_item.add_item
+      data = NamedMethodDeSer.serialize(order)
+
+      parsed = NamedMethodDeSer.parse(data, TestOrder)
+
+      expect(parsed.items.length).to eq 2
+      expect(parsed.items.first).to be_a TestOrderItem
+      expect(parsed.items.first.name).to eq order.items[0].name
+      expect(parsed.items.first.quantity).to eq order.items[0].quantity
+    end
+  end
+
+  describe 'PropertyDeSer' do
+    it 'parses properties correctly' do
+      data = PropertyDeSer.serialize(order)
+
+      parsed = PropertyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop
+      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.integer_prop).to   eq order.integer_prop
+      expect(parsed.decimal_prop).to   eq order.decimal_prop
+      expect(parsed.bool_prop).to      eq order.bool_prop
+      expect(parsed.date_prop).to      eq order.date_prop
+      expect(parsed.float_prop).to     eq order.float_prop
+      expect((parsed.timestamp_prop.to_f - order.timestamp_prop.to_f).abs).to be < 1
+      expect((parsed.millis_prop.to_f - order.millis_prop.to_f).abs).to be < 1
+    end
+
+    it 'parses nested object' do
+      order.add_customer
+      data = PropertyDeSer.serialize(order)
+
+      parsed = PropertyDeSer.parse(data, TestOrder)
+
+      expect(parsed.customer).to be_present
+      expect(parsed.customer).to be_a OpenStruct
+
+      expect(parsed.customer.name).to eq order.customer.name
+      expect(parsed.customer.tele).to eq order.customer.tele
+    end
+
+    it 'parses nested array objects' do
+      order.add_item.add_item
+      data = PropertyDeSer.serialize(order)
+
+      parsed = PropertyDeSer.parse(data, TestOrder)
+
+      expect(parsed.items.length).to eq 2
+      expect(parsed.items.first).to be_a TestOrderItem
+      expect(parsed.items.first.name).to eq order.items[0].name
+      expect(parsed.items.first.quantity).to eq order.items[0].quantity
+    end
+  end
+
+  describe 'OverrideProperyDeSer' do
+    it 'parses properties correctly' do
+      data = OverrideProperyDeSer.serialize(order)
+
+      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to     eq order.string_prop + '_override'
+      expect(parsed.symbol_prop).to     eq order.symbol_prop
+      expect(parsed.integer_prop).to    eq 6
+    end
+  end
+
+  describe 'InheritanceDeSer' do
+    it 'parses only base attributes' do
+      data = BaseInheritanceDeSer.serialize(order)
+
+      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop
+      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.integer_prop).to   eq nil
+    end
+
+    it 'parses properties correctly' do
+      data = InheritanceDeSer.serialize(order)
+
+      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop
+      expect(parsed.symbol_prop).to    eq CustomSymbolDeSer.serialize(order.symbol_prop)
+      expect(parsed.integer_prop).to   eq order.integer_prop
+    end
+  end
+
+  describe 'CompositionDeSer' do
+    it 'parses only base attributes' do
+      data = BaseCompositionDeSer.serialize(order)
+
+      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop
+      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.integer_prop).to   eq nil
+    end
+
+    it 'parses properties correctly' do
+      data = CompositionDeSer.serialize(order)
+
+      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop
+      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.integer_prop).to   eq order.integer_prop
+    end
+  end
+
+  describe 'BlockDeSer' do
+    it 'parses properties correctly' do
+      data = BlockDeSer.serialize(order)
+
+      parsed = BlockDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to    eq order.string_prop + '_block'
+      expect(parsed.integer_prop).to   eq order.integer_prop + 1
+    end
+
+    it 'parses nested object' do
+      order.add_customer
+      data = BlockDeSer.serialize(order)
+
+      parsed = BlockDeSer.parse(data, TestOrder)
+
+      expect(parsed.customer).to be_present
+      expect(parsed.customer).to be_a OpenStruct
+
+      expect(parsed.customer.name).to eq order.customer.name + '_block'
+      expect(parsed.customer.tele).to eq order.customer.tele
+    end
+
+    it 'parses nested array objects' do
+      order.add_item.add_item
+      data = BlockDeSer.serialize(order)
+
+      parsed = BlockDeSer.parse(data, TestOrder)
+
+      expect(parsed.items.length).to eq 2
+      expect(parsed.items.first).to be_a TestOrderItem
+      expect(parsed.items.first.name).to eq order.items[0].name + '_block'
+      expect(parsed.items.first.quantity).to eq order.items[0].quantity
+    end
+  end
+end
