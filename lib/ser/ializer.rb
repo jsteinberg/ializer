@@ -40,6 +40,8 @@ module Ser
       end
 
       def register(method_name, deser, *matchers)
+        raise ArgumentError, 'register should only be called on the Ser::Ializer class' unless self == Ser::Ializer
+
         define_singleton_method(method_name) do |name, options = {}, &block|
           options[:deser] = deser
           add_attribute Field.new(name, options, &block)
