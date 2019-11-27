@@ -5,11 +5,11 @@ class OverrideProperyDeSer < De::Ser::Ializer
   symbol      :symbol_prop
   integer     :integer_prop
 
-  def self.string_prop(object)
+  def self.string_prop(object, _context)
     "#{object.string_prop}_override"
   end
 
-  def self.integer_prop(_object)
-    6
+  def self.integer_prop(_object, _context)
+    106
   end
 end

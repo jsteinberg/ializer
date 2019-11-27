@@ -2,7 +2,7 @@
 
 module Ializer
   class BooleanDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       value
     end
 

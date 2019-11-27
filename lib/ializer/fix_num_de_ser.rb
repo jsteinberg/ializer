@@ -2,7 +2,7 @@
 
 module Ializer
   class FixNumDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       value
     end
 

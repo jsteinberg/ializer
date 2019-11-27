@@ -69,6 +69,24 @@ RSpec.describe Ser::Ializer do
       expect(data['float-prop']).to     eq Ializer::FloatDeSer.serialize(order.float_prop)
     end
 
+    it 'does not serialize admin props with no context' do
+      data = PropertyDeSer.serialize(order)
+
+      expect(data['secret-prop']).not_to be_present
+    end
+
+    it 'does not serialize admin props with if context.admin? false' do
+      data = PropertyDeSer.serialize(order, OpenStruct.new(admin?: false))
+
+      expect(data['secret-prop']).not_to be_present
+    end
+
+    it 'does serialize admin props with if context.admin? true' do
+      data = PropertyDeSer.serialize(order, OpenStruct.new(admin?: true))
+
+      expect(data['secret-prop']).to eq 'secret'
+    end
+
     it 'serializes nested object' do
       order.add_customer
 
@@ -90,13 +108,44 @@ RSpec.describe Ser::Ializer do
     end
   end
 
+  describe 'PropertySerializer' do
+    it 'serializes properties correctly' do
+      data = PropertySerializer.serialize(order)
+
+      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
+    end
+
+    it 'does not serialize admin props with no context' do
+      data = PropertySerializer.serialize(order)
+
+      expect(data['secret-prop']).not_to be_present
+    end
+
+    it 'does serialize admin props with if context.admin? true' do
+      data = PropertySerializer.serialize(order, OpenStruct.new(admin?: true))
+
+      expect(data['secret-prop']).to eq 'secret'
+    end
+
+    it 'serializes nested object with anonymous serializer' do
+      order.add_customer
+
+      data = PropertySerializer.serialize(order)
+
+      expect(data['customer']).to be_present
+      expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
+      expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+    end
+  end
+
   describe 'OverrideProperyDeSer' do
     it 'serializes properties correctly' do
       data = OverrideProperyDeSer.serialize(order)
 
       expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop) + '_override'
       expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
-      expect(data['integer-prop']).to   eq 6
+      expect(data['integer-prop']).to   eq 106
     end
   end
 

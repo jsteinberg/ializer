@@ -13,6 +13,7 @@ TestOrder = Struct.new(
   :timestamp_prop,
   :millis_prop,
   :float_prop,
+  :secret_prop,
   :customer,
   :items,
   keyword_init: true
@@ -28,7 +29,8 @@ TestOrder = Struct.new(
       date_prop: Date.today,
       timestamp_prop: timestamp,
       millis_prop: timestamp,
-      float_prop: 3.14
+      float_prop: 3.14,
+      secret_prop: 'secret'
   end
 
   def add_item

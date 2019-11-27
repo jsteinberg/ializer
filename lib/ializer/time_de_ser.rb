@@ -4,7 +4,7 @@ require 'active_support/time'
 
 module Ializer
   class TimeDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       value.to_time.iso8601(3) # to_time to force consistent serialization
     end
 

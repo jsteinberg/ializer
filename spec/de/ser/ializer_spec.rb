@@ -65,6 +65,13 @@ RSpec.describe De::Ser::Ializer do
       expect((parsed.millis_prop.to_f - order.millis_prop.to_f).abs).to be < 1
     end
 
+    it 'parses conditional props' do
+      data = PropertyDeSer.serialize(order, OpenStruct.new(admin?: true))
+
+      parsed = PropertyDeSer.parse(data, TestOrder)
+      expect(parsed.secret_prop).to eq order.secret_prop
+    end
+
     it 'parses nested object' do
       order.add_customer
       data = PropertyDeSer.serialize(order)
@@ -91,6 +98,12 @@ RSpec.describe De::Ser::Ializer do
     end
   end
 
+  describe 'PropertySerializer' do
+    it 'does not implement parse method' do
+      expect(PropertySerializer).not_to respond_to(:parse)
+    end
+  end
+
   describe 'OverrideProperyDeSer' do
     it 'parses properties correctly' do
       data = OverrideProperyDeSer.serialize(order)
@@ -99,7 +112,7 @@ RSpec.describe De::Ser::Ializer do
 
       expect(parsed.string_prop).to     eq order.string_prop + '_override'
       expect(parsed.symbol_prop).to     eq order.symbol_prop
-      expect(parsed.integer_prop).to    eq 6
+      expect(parsed.integer_prop).to    eq 106
     end
   end
 

@@ -2,7 +2,7 @@
 
 module Ializer
   class FloatDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       return NAN_STRING if value.nan?
 
       return value.to_s if value.infinite?

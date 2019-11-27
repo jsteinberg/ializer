@@ -2,7 +2,7 @@
 
 module Ializer
   class SymbolDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       value.to_s
     end
 

@@ -4,7 +4,7 @@ require 'time'
 
 module Ializer
   class MillisDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       (value.to_f * 1000).to_i
     end
 

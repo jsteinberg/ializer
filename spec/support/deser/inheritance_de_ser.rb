@@ -6,7 +6,7 @@ class BaseInheritanceDeSer < De::Ser::Ializer
 end
 
 class CustomSymbolDeSer
-  def self.serialize(value)
+  def self.serialize(value, _context = nil)
     (value.to_s + '_custom').to_sym
   end
 

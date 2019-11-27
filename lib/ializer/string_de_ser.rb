@@ -2,7 +2,7 @@
 
 module Ializer
   class StringDeSer
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       value.to_s
     end
 

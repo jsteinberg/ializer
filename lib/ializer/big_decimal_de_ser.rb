@@ -8,7 +8,7 @@ module Ializer
     INFINITY_STRING = '-Infinity'
     NEGATIVE_INFINITY_STRING = '-Infinity'
 
-    def self.serialize(value)
+    def self.serialize(value, _context = nil)
       value.to_s('F')
     end
 
