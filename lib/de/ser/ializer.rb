@@ -18,8 +18,10 @@ module De
           # OpenStruct lazily defines methods so respond_to? fails initially
           return parse_ostruct(data) if ostruct?(model_class)
 
-          object = model_class.new
+          parse_object(data, model_class.new)
+        end
 
+        def parse_object(data, object)
           data.each do |key, value|
             parse_attribute(object, key, value)
           end
