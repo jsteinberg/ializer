@@ -143,6 +143,17 @@ RSpec.describe Ser::Ializer do
       expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
       expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
     end
+
+    describe 'attribute_names' do
+      it 'contains all fields' do
+        attribute_names = PropertySerializer.attribute_names
+
+        expect(attribute_names).to include(:string_prop)
+        expect(attribute_names).to include(:symbol_prop)
+        expect(attribute_names).to include(:secret_prop)
+        expect(attribute_names).to include(:customer)
+      end
+    end
   end
 
   describe 'UnderscoredDeSer' do
@@ -226,6 +237,20 @@ RSpec.describe Ser::Ializer do
       expect(data['items'].length).to eq 2
       expect(data['items'][0]['name']).to eq order.items[0].name + '_block'
       expect(data['items'][0]['quantity']).to eq Ializer::FixNumDeSer.serialize(order.items[0].quantity)
+    end
+  end
+
+  describe 'DefaultDeSer' do
+    it 'raises error if raise_on_default specified' do
+      ::Ializer.config.raise_on_default = true
+
+      expect do
+        described_class.send(:create_anon_class).class_eval do
+          property :uses_default
+        end
+      end.to raise_error(ArgumentError)
+
+      ::Ializer.config.raise_on_default = false
     end
   end
 end

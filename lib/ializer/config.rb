@@ -3,6 +3,7 @@
 module Ializer
   class Config
     def initialize
+      @warn_on_default = true
       self.key_transform = :dasherize
     end
 
@@ -23,5 +24,25 @@ module Ializer
     # A key_transformer has higher precedence than key_transform
     # default is +nil+.
     attr_accessor :key_transformer
+
+    ##
+    # :attr_accessor: warn_on_default
+    #
+    # The DefaultDeSer when converting to JSON will only work properly for standard
+    # JSON value types(:string, :number, :boolean)
+    # A warning message will be logged if the DefaultDeSer has been used
+    # default is +true+.
+    attr_accessor :warn_on_default
+    alias warn_on_default? warn_on_default
+
+    ##
+    # :attr_accessor: raise_on_default
+    #
+    # The DefaultDeSer when converting to JSON will only work properly for standard
+    # JSON value types(:string, :number, :boolean)
+    # An error will be raised if the DefaultDeSer has been used
+    # default is +nil+.
+    attr_accessor :raise_on_default
+    alias raise_on_default? raise_on_default
   end
 end

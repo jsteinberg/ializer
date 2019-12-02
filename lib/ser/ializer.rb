@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Ser
-  class Ializer
+  class Ializer # rubocop:disable Metrics/ClassLength
     @@method_registry = {} # rubocop:disable Style/ClassVars
 
     class << self
@@ -9,13 +9,13 @@ module Ser
       def property(name, options = {}, &block)
         return add_attribute(Field.new(name, options, &block)) if options[:deser]
 
-        return string(name, options, &block) unless options[:type]
+        return default(name, options, &block) unless options[:type]
 
         meth = lookup_method(options[:type])
 
         return meth.call(name, options, &block) if meth
 
-        string(name, options, &block)
+        default(name, options, &block)
       end
 
       def nested(name, options = {}, &block)
@@ -52,6 +52,17 @@ module Ser
         end
       end
 
+      def register_default(deser)
+        define_singleton_method('default') do |name, options = {}, &block|
+          raise ArgumentError, warning_message(name) if ::Ializer.config.raise_on_default?
+
+          puts warning_message(name) if ::Ializer.config.warn_on_default?
+
+          options[:deser] = deser
+          add_attribute Field.new(name, options, &block)
+        end
+      end
+
       def attribute_names
         _attributes.values.map(&:name)
       end
@@ -84,6 +95,10 @@ module Ser
       end
 
       private
+
+      def warning_message(name)
+        "Warning: #{self} using default DeSer for property #{name}"
+      end
 
       def add_attribute(field)
         _attributes[field.key] = field
