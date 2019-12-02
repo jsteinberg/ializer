@@ -21,3 +21,11 @@ class PropertyDeSer < De::Ser::Ializer
     context.admin?
   end
 end
+
+class KeyChangePropertyDeSer < PropertyDeSer
+  property :bool_prop, type: :boolean, key: 'bool-enabled'
+end
+
+class CustomeSetterPropertyDeSer < PropertyDeSer
+  property :string_prop, setter: :setter_string_prop
+end

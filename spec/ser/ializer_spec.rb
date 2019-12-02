@@ -106,6 +106,12 @@ RSpec.describe Ser::Ializer do
       expect(data['items'][0]['name']).to eq Ializer::StringDeSer.serialize(order.items[0].name)
       expect(data['items'][0]['quantity']).to eq Ializer::FixNumDeSer.serialize(order.items[0].quantity)
     end
+
+    it 'serializes custom field keys' do
+      data = KeyChangePropertyDeSer.serialize(order)
+
+      expect(data['bool-enabled']).to eq Ializer::BooleanDeSer.serialize(order.bool_prop)
+    end
   end
 
   describe 'PropertySerializer' do
@@ -136,6 +142,15 @@ RSpec.describe Ser::Ializer do
       expect(data['customer']).to be_present
       expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
       expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+    end
+  end
+
+  describe 'UnderscoredDeSer' do
+    it 'serializes properties correctly with underscores' do
+      data = UnderscoredDeSer.serialize(order)
+
+      expect(data['string_prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+      expect(data['symbol_prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
     end
   end
 

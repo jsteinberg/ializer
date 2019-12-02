@@ -42,6 +42,10 @@ TestOrder = Struct.new(
   def add_customer
     self.customer = OpenStruct.new(name: LETTERS.sample(10).join, tele: NUMBERS.sample(10).join)
   end
+
+  def setter_string_prop(val)
+    self.string_prop = val
+  end
 end
 
 TestOrderItem = Struct.new(:name, :quantity, keyword_init: true) do

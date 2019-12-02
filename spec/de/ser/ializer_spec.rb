@@ -96,6 +96,21 @@ RSpec.describe De::Ser::Ializer do
       expect(parsed.items.first.name).to eq order.items[0].name
       expect(parsed.items.first.quantity).to eq order.items[0].quantity
     end
+
+    it 'parses custom field keys' do
+      data = KeyChangePropertyDeSer.serialize(order)
+      parsed = KeyChangePropertyDeSer.parse(data, TestOrder)
+
+      expect(data.keys).to include('bool-enabled')
+      expect(parsed.bool_prop).to eq order.bool_prop
+    end
+
+    it 'parses uses custom setter' do
+      data = CustomeSetterPropertyDeSer.serialize(order)
+      parsed = CustomeSetterPropertyDeSer.parse(data, TestOrder)
+
+      expect(parsed.string_prop).to eq order.string_prop
+    end
   end
 
   describe 'PropertySerializer' do

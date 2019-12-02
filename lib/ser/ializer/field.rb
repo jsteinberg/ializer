@@ -3,12 +3,18 @@
 module Ser
   class Ializer
     class Field
+      class << self
+        def transform(key)
+          ::Ializer.config.key_transformer.call(key)
+        end
+      end
+
       attr_reader :name, :setter, :key, :deser, :model_class, :if_condition, :block
 
       def initialize(name, options, &block)
         @name = name
-        @setter = "#{name}=" # TODO: configurable
-        @key = name.to_s.dasherize # TODO: configurable
+        @setter = options[:setter] || "#{name}="
+        @key = options[:key] || Field.transform(name.to_s)
         @deser = options[:deser]
         @if_condition = options[:if]
         @model_class = options[:model_class]
