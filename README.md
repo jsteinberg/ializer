@@ -23,7 +23,7 @@ A fast serializer/deserializer for Ruby Objects.
 
 ## Design Goals
 
-* Simple Singular DSL for defining object to data and data to object mappings
+* Simple Singular DSL for defining object-to-data and data-to-object mappings
 * Support for nested object relationships
 * Isolate serialization/parsing code from object to not pollute method space
 * speed
@@ -50,7 +50,7 @@ require 'ializer'
 
 ## Usage
 
-### Model Definition
+### Model Definitions
 
 ```ruby
 class Order
@@ -176,7 +176,7 @@ data = OrderDeSer.serialize([order, order2])
 
 ### Object Deserialization
 
-**Note: Objects that are parsed must have a zero argument initializer (ie: Object.new)**
+**Note: Objects that are parsed must have a zero-argument initializer (ie: Object.new)**
 
 #### Parsing a hash
 ```ruby
@@ -187,7 +187,7 @@ model = OrderDeSer.parse(data, Order)
 
 ### Attributes
 
-Attributes are defined in`ializer` using the `property` method.
+Attributes are defined in `ializer` using the `property` method.
 
 By default, attributes are read directly from the model property of the same name.  In this example, `name` is expected to be a property of the object being serialized:
 
@@ -454,7 +454,7 @@ For more examples check the `spec/support/deser` folder.
 ### Key Transforms
 By default `ializer` dasherizes the key names. You can override this setting by either specifying a different string method for transforms or providing a proc for manual transformation.
 
-**Note: key\_transformer will override any value set as the key\_transform**
+**Note: `key_transformer` will override any value set as the `key_transform`**
 
 ```ruby
 Ializer.setup do |config|
