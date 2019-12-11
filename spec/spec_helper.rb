@@ -7,6 +7,8 @@ SimpleCov.start 'test_frameworks'
 
 require 'ializer'
 
+::Ializer.config.key_transform = :dasherize
+
 Dir[File.dirname(__FILE__) + '/support/model/*.rb'].each { |f| require f }
 Dir[File.dirname(__FILE__) + '/support/**/*.rb'].sort.each { |f| require f }
 

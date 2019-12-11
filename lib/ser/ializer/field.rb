@@ -5,6 +5,8 @@ module Ser
     class Field
       class << self
         def transform(key)
+          return key unless ::Ializer.config.key_transformer
+
           ::Ializer.config.key_transformer.call(key)
         end
       end

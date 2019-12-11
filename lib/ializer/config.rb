@@ -4,7 +4,6 @@ module Ializer
   class Config
     def initialize
       @warn_on_default = true
-      self.key_transform = :dasherize
     end
 
     ##
@@ -13,7 +12,7 @@ module Ializer
     # symbol of string transform to call on field keys
     # default is +:dasherize+.
     def key_transform=(key_transform)
-      self.key_transformer = key_transform.to_proc
+      self.key_transformer = key_transform&.to_proc
     end
 
     ##

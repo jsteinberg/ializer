@@ -9,10 +9,12 @@ A fast serializer/deserializer for Ruby Objects.
 * [Usage](#usage)
   * [Model Definitions](#model-definitions)
   * [Serializer Definitions](#serializer-definitions)
+  * [DeSerializer Definitions](#deserializer-definitions)
   * [Object Serialization](#object-serialization)
   * [Object Deserialization](#object-deserialization)
-  * [Attributes](#attributes)
+* [Attributes](#attributes)
   * [Nested Attributes](#nested-attributes)
+  * [Attribute Types](#attribute-types)
   * [Serialization Context](#serialization-context)
   * [Conditional Attributes](#conditional-attributes)
   * [Attribute Sharing](#attribute-sharing)
@@ -83,7 +85,32 @@ class Customer
 end
 ```
 
+### Serializer Definition
+
+```ruby
+class OrderDeSer < Ser::Ializer
+  integer    :id
+  timestamp  :created_at
+
+  nested     :items,       deser: OrderItemDeSer
+  nested     :customer,    deser: CustomerDeSer
+end
+
+class OrderItemDeSer < Ser::Ializer
+  string     :name
+  decimal    :price
+  boolean    :in_stock
+end
+
+class CustomerDeSer < Ser::Ializer
+  string     :name
+  string     :email
+end
+```
+
 ### DeSerializer Definition
+
+To also have the ability to parse objects from hash.  `De::Ser::Ializer`s inherit from `Ser::Ializer` so can both parse and serialize objects.
 
 ```ruby
 class OrderDeSer < De::Ser::Ializer
@@ -125,7 +152,7 @@ data = OrderDeSer.serialize(order)
 #### Return Serialized JSON
 ```ruby
 require 'json'
-json_string = OrderDeser.serializer(order).to_json # Or any method of your choosing
+json_string = OrderDeser.serialize(order).to_json # Or any method of your choosing
 ```
 
 #### Serialized Output
@@ -185,7 +212,7 @@ model = OrderDeSer.parse(data, Order)
  => #<Order:0x00007f9e44aabd80 @id=4, @created_at=Sun, 01 Dec 2019 00:00:00 -0600, @items=[#<OrderItem:0x00007f9e44aab6f0 @name="Baseball", @in_stock=true, @price=0.499e1>, #<OrderItem:0x00007f9e44aab628 @name="Football", @in_stock=false, @price=0.1499e2>], @customer=#<Customer:0x00007f9e44aab498 @name="Bowser", @email="bowser@example.net">>
 ```
 
-### Attributes
+## Attributes
 
 Attributes are defined in `ializer` using the `property` method.
 
@@ -207,6 +234,41 @@ class Customer < De::Ser::Ializer
 end
 ```
 
+### Nested Attributes
+
+`ializer` was built for serialization and parsing of nested objects.  You can create a nested object via the `property` method or a specialized `nested` method.
+
+The `nested` method allows you to define a deser inline.
+
+```ruby
+class OrderDeSer < De::Ser::Ializer
+  integer    :id
+  timestamp  :created_at
+
+  property   :items,       deser: OrderItemDeSer,   model_class: OrderItem
+  # OR
+  nested     :items,       deser: OrderItemDeSer,   model_class: OrderItem
+
+  nested     :customer,    model_class: Customer do
+    string     :name
+    string     :email
+  end
+end
+```
+
+The `property` method **DOES NOT** allow you to define a deser inline, but instead allows you to override the value of the field.
+
+```ruby
+class OrderDeSer < De::Ser::Ializer
+  integer    :id
+  property   :items,       deser: OrderItemDeSer,   model_class: OrderItem do |object, _context|
+    object.items.select { |i| i.should_display? }
+  end
+end
+```
+
+### Attribute Types
+
 The following types are included with `ializer`
 
 | Type       | method alias | mappings                   |
@@ -224,6 +286,7 @@ The following types are included with `ializer`
 
 **Note: Default just uses the current value of the field and will only properly deserialize if it is a standard json value type(number, string, boolean).**
 
+#### Default Attribute Configuration Options
 There are a few settings for dealing with the `DefaultDeSer`.
 
 ```ruby
@@ -236,17 +299,22 @@ end
 
 Since `De::Ser::Ializer`s are configured on load, raising an exception should halt the application from starting(instead of silently failing later).  By default a warning is logged to `STDOUT`.
 
-
 #### Registering Custom Attribute types
 
 You can register your own types or override the provided types.  A custom attribute type DeSer must implement the following methods.  When registering, you must register with the base `Ser::Ializer` class.
 
 ```ruby
+Ser::Ializer.register(method_name, deser, *mappings)
+```
+
+```ruby
 class CustomDeSer
   def self.serialize(value, _context = nil)
+    "#{value}_custom"
   end
 
   def self.parse(value)
+    value.split("_")[0]
   end
 end
 
@@ -259,7 +327,9 @@ Then you can use them as follows:
 class Customer < De::Ser::Ializer
   integer :id
   string :name
-  custom :custom_prop # or property :custom_prop, type: :custom
+  custom :custom_prop
+  # or
+  property :custom_prop, type: :custom
 end
 ```
 
@@ -315,30 +385,9 @@ Attributes can also use a different name by passing the original method or acces
 
 ```ruby
 class Customer < De::Ser::Ializer
-  string :name, key: 'customer-name' # Note: this will not be transformed
+  string :name, key: 'customer-name' # Note: an explicitly set key will not be transformed by the configured key_transformer
 end
 ```
-
-### Nested Attributes
-
-`ializer` was built for serialization and parsing of nested objects.  You can create a nested object via the `property` method or a specialized `nested` method.  The `nested` method allows you to define a deser inline.
-
-```ruby
-class OrderDeSer < De::Ser::Ializer
-  integer    :id
-  timestamp  :created_at
-
-  property   :items,       deser: OrderItemDeSer,   model_class: OrderItem
-  # OR
-  nested     :items,       deser: OrderItemDeSer,   model_class: OrderItem
-
-  nested     :customer,    model_class: Customer do
-    string     :name
-    string     :email
-  end
-end
-```
-**Note: passing a nested collection to property with a block will attempt to override the field value, not create an inline deser**
 
 ### Serialization Context
 
@@ -452,13 +501,13 @@ end
 For more examples check the `spec/support/deser` folder.
 
 ### Key Transforms
-By default `ializer` dasherizes the key names. You can override this setting by either specifying a different string method for transforms or providing a proc for manual transformation.
+By default `ializer` uses object field names as the key name. You can override this setting by either specifying a string method for transforms or providing a proc for manual transformation.
 
 **Note: `key_transformer` will override any value set as the `key_transform`**
 
 ```ruby
 Ializer.setup do |config|
-  config.key_transform = :underscore
+  config.key_transform = :dasherize
 end
 
 # or
