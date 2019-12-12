@@ -150,9 +150,10 @@ data = OrderDeSer.serialize(order)
 ```
 
 #### Return Serialized JSON
+Ializer relies on the [`MultiJson`](https://github.com/intridea/multi_json) gem for json serialization/parsing
+
 ```ruby
-require 'json'
-json_string = OrderDeser.serialize(order).to_json # Or any method of your choosing
+json_string = OrderDeser.serialize_json(order)
 ```
 
 #### Serialized Output

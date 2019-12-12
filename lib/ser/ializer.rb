@@ -39,6 +39,10 @@ module Ser
         object.map { |o| serialize_one(o, context) }
       end
 
+      def serialize_json(object, context = nil)
+        MultiJson.dump(serialize(object, context))
+      end
+
       def register(method_name, deser, *matchers)
         raise ArgumentError, 'register should only be called on the Ser::Ializer class' unless self == Ser::Ializer
 
