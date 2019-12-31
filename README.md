@@ -1,3 +1,5 @@
+[![Build](https://github.com/jsteinberg/ializer/workflows/Ruby/badge.svg)](https://github.com/jsteinberg/ializer/actions)
+
 # {De | Ser} Ializer
 
 A fast serializer/deserializer for Ruby Objects.
