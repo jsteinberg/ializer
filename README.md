@@ -1,4 +1,4 @@
-# {De | Ser}Ializer
+# {De | Ser} Ializer
 
 A fast serializer/deserializer for Ruby Objects.
 
@@ -7,6 +7,7 @@ A fast serializer/deserializer for Ruby Objects.
 * [Design Goals](#design-goals)
 * [Installation](#installation)
 * [Usage](#usage)
+  * [Configuration](#configuration)
   * [Model Definitions](#model-definitions)
   * [Serializer Definitions](#serializer-definitions)
   * [DeSerializer Definitions](#deserializer-definitions)
@@ -51,6 +52,23 @@ require 'ializer'
 ```
 
 ## Usage
+
+### Configuration
+
+```ruby
+Ializer.setup do |config|
+  config.key_transform = :dasherize # change serailized key names
+  # or
+  config.key_transformer = ->(key) {
+    key.lowercase.undsercore + '1'
+  }
+  config.warn_on_default = true # outputs a warning to STDOUT(puts) if DefaultDeSer is used
+  config.raise_on_default = false # raises an exception if the DefaultDeSer is used
+end
+
+```
+
+For more information, see [Key Transforms](#key-transforms) and [Attribute Types](#attribute-types) sections.
 
 ### Model Definitions
 
@@ -110,7 +128,7 @@ end
 
 ### DeSerializer Definition
 
-To also have the ability to parse objects from hash.  `De::Ser::Ializer`s inherit from `Ser::Ializer` so can both parse and serialize objects.
+`De::Ser::Ializers` can deserialize from JSON and serialize to JSON. If you only need serialization capabilities, you can inherit from, `Ser::Italizer` instead.
 
 ```ruby
 class OrderDeSer < De::Ser::Ializer
@@ -246,9 +264,9 @@ class OrderDeSer < De::Ser::Ializer
   integer    :id
   timestamp  :created_at
 
-  property   :items,       deser: OrderItemDeSer,   model_class: OrderItem
-  # OR
   nested     :items,       deser: OrderItemDeSer,   model_class: OrderItem
+  # OR
+  property   :items,       deser: OrderItemDeSer,   model_classx: OrderItem
 
   nested     :customer,    model_class: Customer do
     string     :name
@@ -263,7 +281,7 @@ The `property` method **DOES NOT** allow you to define a deser inline, but inste
 class OrderDeSer < De::Ser::Ializer
   integer    :id
   property   :items,       deser: OrderItemDeSer,   model_class: OrderItem do |object, _context|
-    object.items.select { |i| i.should_display? }
+    object.items.select(&:should_display?)
   end
 end
 ```
@@ -292,8 +310,7 @@ There are a few settings for dealing with the `DefaultDeSer`.
 
 ```ruby
 Ializer.setup do |config|
-  config.logger = Logger.new(STDOUT)
-  config.warn_on_default = true # logs to the configured logger if the DefaultDeSer is used
+  config.warn_on_default = true # outputs a warning to STDOUT(puts) if DefaultDeSer is used
   config.raise_on_default = false # raises an exception if the DefaultDeSer is used
 end
 ```
@@ -499,7 +516,7 @@ class UserDeSer < De::Ser::Ializer
 end
 ```
 
-For more examples check the `spec/support/deser` folder.
+For more examples check the [`spec/support/deser`](https://github.com/jsteinberg/ializer/tree/master/spec/support/deser) folder.
 
 ### Key Transforms
 By default `ializer` uses object field names as the key name. You can override this setting by either specifying a string method for transforms or providing a proc for manual transformation.
