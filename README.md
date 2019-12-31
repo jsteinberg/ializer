@@ -2,7 +2,7 @@
 
 A fast serializer/deserializer for Ruby Objects.
 
-# Table of Contents
+## Table of Contents
 
 * [Design Goals](#design-goals)
 * [Installation](#installation)
@@ -42,7 +42,7 @@ gem 'ializer'
 Execute:
 
 ```bash
-$ bundle install
+bundle install
 ```
 
 Require:
@@ -163,11 +163,13 @@ order.customer = Customer.new(name: 'Bowser', email: 'bowser@example.net')
 ### Object Serialization
 
 #### Return a hash
+
 ```ruby
 data = OrderDeSer.serialize(order)
 ```
 
 #### Return Serialized JSON
+
 Ializer relies on the [`MultiJson`](https://github.com/intridea/multi_json) gem for json serialization/parsing
 
 ```ruby
@@ -222,9 +224,10 @@ data = OrderDeSer.serialize([order, order2])
 
 ### Object Deserialization
 
-**Note: Objects that are parsed must have a zero-argument initializer (ie: Object.new)**
+**Note:** Objects that are parsed must have a zero-argument initializer (ie: Object.new)
 
 #### Parsing a hash
+
 ```ruby
 model = OrderDeSer.parse(data, Order)
 
@@ -306,6 +309,7 @@ The following types are included with `ializer`
 **Note: Default just uses the current value of the field and will only properly deserialize if it is a standard json value type(number, string, boolean).**
 
 #### Default Attribute Configuration Options
+
 There are a few settings for dealing with the `DefaultDeSer`.
 
 ```ruby
@@ -411,7 +415,6 @@ end
 
 In some cases a `Ser::Ializer` might require more information than what is available on the record.  A context object can be passed to serialization and used however necessary.
 
-
 ```ruby
 class CustomerSerializer < Ser::Ializer
   integer :id
@@ -498,7 +501,7 @@ class UserDeSer < De::Ser::Ializer
 end
 ```
 
-**Note: Because of scoping, including a deser using `with` will not include any method overrides**
+**Note:** Because of scoping, including a deser using `with` will not include any method overrides
 
 ```ruby
 class BaseApiDeSer < De::Ser::Ializer
@@ -519,9 +522,10 @@ end
 For more examples check the [`spec/support/deser`](https://github.com/jsteinberg/ializer/tree/master/spec/support/deser) folder.
 
 ### Key Transforms
+
 By default `ializer` uses object field names as the key name. You can override this setting by either specifying a string method for transforms or providing a proc for manual transformation.
 
-**Note: `key_transformer` will override any value set as the `key_transform`**
+**Note:** `key_transformer` will override any value set as the `key_transform`
 
 ```ruby
 Ializer.setup do |config|
@@ -542,10 +546,10 @@ end
 
 Defining of desers is not thread safe.  As long as defitions are preloaded then thread safety is not a concern.  **Note: because of this you should not create desers at runtime**
 
-# Performance Comparison
+## Performance Comparison
 
 TODO
 
-# Contributing
+## Contributing
 
 TODO
