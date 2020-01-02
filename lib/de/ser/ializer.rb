@@ -29,6 +29,11 @@ module De
           object
         end
 
+        def parse_json(json, model_class)
+          data = MultiJson.load(json)
+          parse(data, model_class)
+        end
+
         def parse_attribute(object, key, value)
           field = _attributes[key]
 

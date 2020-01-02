@@ -173,6 +173,17 @@ RSpec.describe De::Ser::Ializer do
       expect(parsed.symbol_prop).to    eq order.symbol_prop
       expect(parsed.integer_prop).to   eq order.integer_prop
     end
+
+    describe 'parse_json' do
+      it 'parses json correctly' do
+        json = BaseCompositionDeSer.serialize_json(order)
+
+        parsed = BaseCompositionDeSer.parse_json(json, TestOrder)
+        expect(parsed.string_prop).to    eq order.string_prop
+        expect(parsed.symbol_prop).to    eq order.symbol_prop
+        expect(parsed.integer_prop).to   eq nil
+      end
+    end
   end
 
   describe 'BlockDeSer' do

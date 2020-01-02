@@ -165,6 +165,15 @@ RSpec.describe Ser::Ializer do
     end
   end
 
+  describe 'NoKeyTransformerDeSer' do
+    it 'serializes properties correctly with underscores' do
+      data = NoKeyTransformerDeSer.serialize(order)
+
+      expect(data['string_prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+      expect(data['symbol_prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
+    end
+  end
+
   describe 'OverrideProperyDeSer' do
     it 'serializes properties correctly' do
       data = OverrideProperyDeSer.serialize(order)
@@ -208,6 +217,18 @@ RSpec.describe Ser::Ializer do
       expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
       expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
       expect(data['integer-prop']).to   eq Ializer::FixNumDeSer.serialize(order.integer_prop)
+    end
+
+    describe 'serialize_json' do
+      it 'serializes to json correctly' do
+        json = BaseCompositionDeSer.serialize_json(order)
+
+        expect(json).to eq '{"string-prop":"string","symbol-prop":"symbol"}'
+
+        data = JSON.parse(json)
+        expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+        expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
+      end
     end
   end
 

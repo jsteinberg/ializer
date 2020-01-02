@@ -19,6 +19,8 @@ require 'ializer/time_de_ser'
 
 require 'ializer/config'
 
+require 'multi_json'
+
 module Ializer
   # Returns the global configuration instance
   def self.config
