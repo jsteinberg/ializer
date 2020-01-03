@@ -42,4 +42,4 @@ jobs:
 
     - name: Rubocop
       run: |
-        bundle exec rspec
+        bundle exec rubocop -c .rubocop.yml
