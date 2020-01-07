@@ -22,7 +22,7 @@ jobs:
         mkdir -p $HOME/.gem
         touch $HOME/.gem/credentials
         chmod 0600 $HOME/.gem/credentials
-        printf -- "---\n:github: Bearer ${GITHUB_TOKEN}\n:rubygems: Bearer ${RUBYGEMS_API_KEY}\n" > $HOME/.gem/credentials
+        printf -- "---\n:github: Bearer ${GITHUB_TOKEN}\n:rubygems_api_key: Bearer ${RUBYGEMS_API_KEY}\n" > $HOME/.gem/credentials
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
@@ -36,4 +36,4 @@ jobs:
     - name: Publish to RubyGems
       run: |
         gem build *.gemspec
-        gem push --KEY rubygems *.gem
+        gem push --KEY rubygems_api_key *.gem
