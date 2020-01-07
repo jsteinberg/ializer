@@ -13,3 +13,4 @@ module Ializer
 end
 
 Ser::Ializer.register_default(Ializer::DefaultDeSer)
+Ser::Ializer.register('json', Ializer::DefaultDeSer, :json)
