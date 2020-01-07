@@ -306,9 +306,10 @@ The following types are included with `ializer`
 | String     | `string()`   | String, :millis            |
 | Symbol     | `symbol()`   | Symbol, :symbol, :sym      |
 | Time       | `timestamp()`| Time, DateTime, :timestamp |
+| JSON       | `json()`     | :json                      |
 | Default    | `default()`  | :default                   |
 
-**Note: Default just uses the current value of the field and will only properly deserialize if it is a standard json value type(number, string, boolean).**
+**Note: JSON/Default just uses the current value of the field and will only properly deserialize if it is a standard json value type(number, string, boolean).**
 
 #### Default Attribute Configuration Options
 
