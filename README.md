@@ -1,4 +1,4 @@
-[![Build](https://github.com/jsteinberg/ializer/workflows/Ruby/badge.svg)](https://github.com/jsteinberg/ializer/actions)
+[![Build](https://github.com/jsteinberg/ializer/workflows/Ruby/badge.svg)](https://github.com/jsteinberg/ializer/actions) [![Gem Version](https://badge.fury.io/rb/ializer.svg)](https://badge.fury.io/rb/ializer)
 
 # {De | Ser} Ializer
 
