@@ -23,6 +23,12 @@ module Ser
         @block = block
       end
 
+      def get_value(object, context)
+        return object.public_send(name) unless block
+
+        block.call(object, context)
+      end
+
       def serialize(value, context)
         deser.serialize(value, context)
       end
