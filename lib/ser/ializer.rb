@@ -29,7 +29,9 @@ module Ser
       end
 
       def with(deser)
-        deser._attributes.values.map(&:dup).each(&method(:add_attribute))
+        deser._attributes.values.each do |field|
+          add_composed_attribute(field, deser)
+        end
       end
       # End Public DSL
 
@@ -107,26 +109,18 @@ module Ser
       def add_attribute(field)
         _attributes[field.key] = field
 
-        if field.block
-          add_attribute_with_block(field)
-        else
-          add_attribute_with_method(field)
-        end
-      end
-
-      def add_attribute_with_block(field)
         define_singleton_method field.name do |object, context|
-          value = field.block.call(object, context)
+          value = field.get_value(object, context)
 
           serialize_field(field, value, context)
         end
       end
 
-      def add_attribute_with_method(field)
-        define_singleton_method field.name do |object, context|
-          value = object.public_send(field.name)
+      def add_composed_attribute(field, deser)
+        _attributes[field.key] = field
 
-          serialize_field(field, value, context)
+        define_singleton_method field.name do |object, context|
+          deser.public_send(field.name, object, context)
         end
       end
 

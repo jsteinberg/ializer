@@ -504,21 +504,30 @@ class UserDeSer < De::Ser::Ializer
 end
 ```
 
-**Note:** Because of scoping, including a deser using `with` will not include any method overrides
+**Note:** Including a deser using `with` will include any method overrides.
 
 ```ruby
 class BaseApiDeSer < De::Ser::Ializer
   integer    :id
   timestamp  :created_at
+  timestamp  :updated_at
 
   def self.created_at(object, context)
-    # NOT INCLUDED IN UserDeSer.  UserDeSer will call `.created_at` on any serialization target
+    # INCLUDED IN UserDeSer
+  end
+
+  def self.updated_at(object, context)
+    # NOT INCLUDED IN UserDeSer(Overridden below)
   end
 end
 
 class UserDeSer < De::Ser::Ializer
   with BaseApiDeSer
   string  :email
+
+  def self.updated_at(object, context)
+    # INCLUDED IN UserDeSer.
+  end
 end
 ```
 

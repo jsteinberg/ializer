@@ -157,20 +157,20 @@ RSpec.describe De::Ser::Ializer do
     it 'parses only base attributes' do
       data = BaseCompositionDeSer.serialize(order)
 
-      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+      parsed = BaseCompositionDeSer.parse(data, TestOrder)
 
-      expect(parsed.string_prop).to    eq order.string_prop
-      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.string_prop).to    eq order.string_prop + '_override'
+      expect(parsed.symbol_prop).to    eq((order.symbol_prop.to_s + '_override').to_sym)
       expect(parsed.integer_prop).to   eq nil
     end
 
     it 'parses properties correctly' do
       data = CompositionDeSer.serialize(order)
 
-      parsed = OverrideProperyDeSer.parse(data, TestOrder)
+      parsed = CompositionDeSer.parse(data, TestOrder)
 
-      expect(parsed.string_prop).to    eq order.string_prop
-      expect(parsed.symbol_prop).to    eq order.symbol_prop
+      expect(parsed.string_prop).to    eq order.string_prop + '_override2'
+      expect(parsed.symbol_prop).to    eq((order.symbol_prop.to_s + '_override').to_sym)
       expect(parsed.integer_prop).to   eq order.integer_prop
     end
 
@@ -179,8 +179,8 @@ RSpec.describe De::Ser::Ializer do
         json = BaseCompositionDeSer.serialize_json(order)
 
         parsed = BaseCompositionDeSer.parse_json(json, TestOrder)
-        expect(parsed.string_prop).to    eq order.string_prop
-        expect(parsed.symbol_prop).to    eq order.symbol_prop
+        expect(parsed.string_prop).to    eq order.string_prop + '_override'
+        expect(parsed.symbol_prop).to    eq((order.symbol_prop.to_s + '_override').to_sym)
         expect(parsed.integer_prop).to   eq nil
       end
     end
