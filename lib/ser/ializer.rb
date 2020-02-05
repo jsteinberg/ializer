@@ -38,6 +38,8 @@ module Ser
       def serialize(object, context = nil)
         return serialize_one(object, context) unless valid_enumerable?(object)
 
+        return [] if object.empty?
+
         object.map { |o| serialize_one(o, context) }
       end
 
@@ -128,6 +130,8 @@ module Ser
         return nil if value.nil?
 
         return field.serialize(value, context) unless valid_enumerable?(value)
+
+        return nil if value.empty?
 
         value.map { |v| field.serialize(v, context) }
       end

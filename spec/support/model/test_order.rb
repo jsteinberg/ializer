@@ -30,12 +30,12 @@ TestOrder = Struct.new(
       timestamp_prop: timestamp,
       millis_prop: timestamp,
       float_prop: 3.14,
-      secret_prop: 'secret'
+      secret_prop: 'secret',
+      items: []
   end
 
   def add_item
-    self.items ||= []
-    self.items << TestOrderItem.init
+    items << TestOrderItem.init
     self
   end
 
