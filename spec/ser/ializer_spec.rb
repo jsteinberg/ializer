@@ -33,6 +33,12 @@ RSpec.describe Ser::Ializer do
       expect(obj_data['integer-prop']).to   eq Ializer::FixNumDeSer.serialize(order.integer_prop)
     end
 
+    it 'returns [] for empty collection' do
+      data = NamedMethodDeSer.serialize([])
+
+      expect(data).to eq []
+    end
+
     it 'serializes nested object' do
       order.add_customer
 
@@ -95,6 +101,12 @@ RSpec.describe Ser::Ializer do
       expect(data['customer']).to be_present
       expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
       expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+    end
+
+    it 'does not serialize empty nested array objects' do
+      data = PropertyDeSer.serialize(order)
+
+      expect(data['items']).to be_nil
     end
 
     it 'serializes nested array objects' do
