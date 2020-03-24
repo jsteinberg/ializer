@@ -6,6 +6,8 @@ RSpec.describe Ializer::BigDecimalDeSer do
   describe '#serialize' do
     it 'serializes values to string' do
       expect(described_class.serialize(BigDecimal('3.1415926'))).to eq '3.1415926'
+      expect(described_class.serialize(3.1415926)).to eq '3.1415926'
+      expect(described_class.serialize(3)).to eq '3.0'
       expect(described_class.serialize(BigDecimal::NAN)).to eq 'NaN'
       expect(described_class.serialize(BigDecimal::INFINITY)).to eq 'Infinity'
       expect(described_class.serialize(-BigDecimal::INFINITY)).to eq '-Infinity'

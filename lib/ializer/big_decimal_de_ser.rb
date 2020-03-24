@@ -5,6 +5,8 @@ require 'bigdecimal'
 module Ializer
   class BigDecimalDeSer
     def self.serialize(value, _context = nil)
+      value = value.to_d unless value.is_a? BigDecimal
+
       value.to_s('F')
     end
 
