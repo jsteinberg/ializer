@@ -20,6 +20,7 @@ RSpec.describe Ializer::BigDecimalDeSer do
       expect(described_class.parse('NaN').to_s).to eql BigDecimal::NAN.to_s
       expect(described_class.parse('Infinity')).to eq BigDecimal::INFINITY
       expect(described_class.parse('-Infinity')).to eq(-BigDecimal::INFINITY)
+      expect(described_class.parse(nil)).to eq nil
     end
   end
 end

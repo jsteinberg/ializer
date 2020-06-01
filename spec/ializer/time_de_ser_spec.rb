@@ -27,6 +27,8 @@ RSpec.describe Ializer::TimeDeSer do
       Time.zone = 'UTC'
 
       expect(described_class.parse(date_string)).to eq time
+
+      expect(described_class.parse(nil)).to eq nil
     end
   end
 end

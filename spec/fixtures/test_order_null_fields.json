@@ -1,0 +1,11 @@
+{
+  "string-prop": null,
+  "symbol-prop": null,
+  "integer-prop": null,
+  "decimal-prop": null,
+  "bool-prop": null,
+  "date-prop": null,
+  "timestamp-prop": null,
+  "float-prop": null,
+  "millis-prop": null
+}

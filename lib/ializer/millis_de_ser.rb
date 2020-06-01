@@ -9,6 +9,8 @@ module Ializer
     end
 
     def self.parse(value)
+      return nil if value.nil?
+
       Time.at(value / 1000.0)
     end
   end

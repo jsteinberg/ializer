@@ -10,6 +10,8 @@ module Ializer
 
     def self.parse(value)
       DateTime.iso8601 value
+    rescue ArgumentError
+      nil
     end
   end
 end
