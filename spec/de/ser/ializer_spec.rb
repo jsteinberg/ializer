@@ -46,6 +46,37 @@ RSpec.describe De::Ser::Ializer do
       expect(parsed.items.first.name).to eq order.items[0].name
       expect(parsed.items.first.quantity).to eq order.items[0].quantity
     end
+
+    it 'parses json file correctly' do
+      json = JSON.parse(File.read('./spec/fixtures/test_order.json'))
+
+      parsed = NamedMethodDeSer.parse(json, TestOrder)
+
+      expect(parsed.string_prop).to    eq 'string'
+      expect(parsed.symbol_prop).to    eq :symbol
+      expect(parsed.integer_prop).to   eq 94
+      expect(parsed.decimal_prop).to   eq '3.141592654'.to_d
+      expect(parsed.bool_prop).to      eq true
+      expect(parsed.date_prop).to      eq Date.parse('2020-06-01')
+      expect(parsed.float_prop).to     eq 3.14
+      expect(parsed.timestamp_prop).to eq Time.parse('2020-06-01T14:53:31.445-05:00')
+    end
+
+    it 'parses json nulls and ignores them' do
+      json = JSON.parse(File.read('./spec/fixtures/test_order_null_fields.json'))
+
+      parsed = NamedMethodDeSer.parse(json, TestOrder)
+
+      expect(parsed.string_prop).to    eq nil
+      expect(parsed.symbol_prop).to    eq nil
+      expect(parsed.integer_prop).to   eq nil
+      expect(parsed.decimal_prop).to   eq nil
+      expect(parsed.bool_prop).to      eq nil
+      expect(parsed.date_prop).to      eq nil
+      expect(parsed.float_prop).to     eq nil
+      expect(parsed.timestamp_prop).to eq nil
+      expect(parsed.millis_prop).to eq nil
+    end
   end
 
   describe 'PropertyDeSer' do

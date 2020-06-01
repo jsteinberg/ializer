@@ -11,6 +11,8 @@ module Ializer
     end
 
     def self.parse(value)
+      return nil if value.nil?
+
       BigDecimal(value)
     end
   end

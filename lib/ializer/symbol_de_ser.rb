@@ -7,6 +7,8 @@ module Ializer
     end
 
     def self.parse(value)
+      return nil if value.nil?
+
       value.to_sym
     end
   end

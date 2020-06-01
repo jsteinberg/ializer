@@ -53,6 +53,8 @@ module De
         private
 
         def parse_field(object, field, value)
+          return if value.nil?
+
           parsed_value = field.parse(value)
 
           return if parsed_value.nil?

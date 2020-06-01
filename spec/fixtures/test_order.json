@@ -1,0 +1,10 @@
+{
+  "string-prop": "string",
+  "symbol-prop": "symbol",
+  "integer-prop": 94,
+  "decimal-prop": "3.141592654",
+  "bool-prop": true,
+  "date-prop": "2020-06-01",
+  "timestamp-prop": "2020-06-01T14:53:31.445-05:00",
+  "float-prop": 3.14
+}

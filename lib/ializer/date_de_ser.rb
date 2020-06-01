@@ -10,7 +10,7 @@ module Ializer
 
     def self.parse(value)
       Date.parse(value)
-    rescue ArgumentError
+    rescue ArgumentError, TypeError
       nil
     end
   end
