@@ -6,7 +6,12 @@ module Ser
 
     class << self
       def config
-        @config ||= ::Ializer.config
+        @config ||=
+          if equal? Ser::Ializer
+            ::Ializer.config
+          else
+            superclass.config
+          end
       end
 
       def setup
