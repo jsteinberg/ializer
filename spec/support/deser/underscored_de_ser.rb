@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-::Ializer.config.key_transform = :underscore
+class BaseUnderscoredDeSer < De::Ser::Ializer
+  setup do |config|
+    config.key_transform = :underscore
+  end
+end
 
-class UnderscoredDeSer < De::Ser::Ializer
+class UnderscoredDeSer < BaseUnderscoredDeSer
   string :string_prop
   symbol :symbol_prop
 end
-
-::Ializer.config.key_transform = :dasherize

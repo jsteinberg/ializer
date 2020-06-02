@@ -5,9 +5,24 @@ module Ser
     @@method_registry = {} # rubocop:disable Style/ClassVars
 
     class << self
+      def config
+        @config ||=
+          if equal? Ser::Ializer
+            ::Ializer.config
+          else
+            superclass.config
+          end
+      end
+
+      def setup
+        @config = config.dup
+
+        yield @config
+      end
+
       # Public DSL
       def property(name, options = {}, &block)
-        return add_attribute(Field.new(name, options, &block)) if options[:deser]
+        return add_attribute(Field.new(name, options, config, &block)) if options[:deser]
 
         return default(name, options, &block) unless options[:type]
 
@@ -25,7 +40,7 @@ module Ser
           options[:deser] = deser
         end
 
-        add_attribute(Field.new(name, options))
+        add_attribute(Field.new(name, options, config))
       end
 
       def with(deser)
@@ -52,7 +67,7 @@ module Ser
 
         define_singleton_method(method_name) do |name, options = {}, &block|
           options[:deser] = deser
-          add_attribute Field.new(name, options, &block)
+          add_attribute Field.new(name, options, config, &block)
         end
 
         matchers.each do |matcher|
@@ -62,12 +77,12 @@ module Ser
 
       def register_default(deser)
         define_singleton_method('default') do |name, options = {}, &block|
-          raise ArgumentError, warning_message(name) if ::Ializer.config.raise_on_default?
+          raise ArgumentError, warning_message(name) if config.raise_on_default?
 
-          puts warning_message(name) if ::Ializer.config.warn_on_default?
+          puts warning_message(name) if config.warn_on_default?
 
           options[:deser] = deser
-          add_attribute Field.new(name, options, &block)
+          add_attribute Field.new(name, options, config, &block)
         end
       end
 

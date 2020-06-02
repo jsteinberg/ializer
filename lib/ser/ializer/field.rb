@@ -4,19 +4,19 @@ module Ser
   class Ializer
     class Field
       class << self
-        def transform(key)
-          return key unless ::Ializer.config.key_transformer
+        def transform(key, key_transformer)
+          return key unless key_transformer
 
-          ::Ializer.config.key_transformer.call(key)
+          key_transformer.call(key)
         end
       end
 
       attr_reader :name, :setter, :key, :deser, :model_class, :if_condition, :block
 
-      def initialize(name, options, &block)
+      def initialize(name, options, config, &block)
         @name = name
         @setter = options[:setter] || "#{name}="
-        @key = options[:key] || Field.transform(name.to_s)
+        @key = options[:key] || Field.transform(name.to_s, config.key_transformer)
         @deser = options[:deser]
         @if_condition = options[:if]
         @model_class = options[:model_class]

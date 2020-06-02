@@ -13,6 +13,7 @@ A fast serializer/deserializer for Ruby Objects.
   * [Model Definitions](#model-definitions)
   * [Serializer Definitions](#serializer-definitions)
   * [DeSerializer Definitions](#deserializer-definitions)
+  * [De/Serializer Configuration](#deserializer-configuration)
   * [Object Serialization](#object-serialization)
   * [Object Deserialization](#object-deserialization)
 * [Attributes](#attributes)
@@ -153,6 +154,26 @@ class CustomerDeSer < De::Ser::Ializer
 end
 ```
 
+### De/Ser::Ializer Configuration
+
+You can override the global config for a specific `Ser::Ializer` or `De::Ser::Ializer` by calling the setup command.
+
+**Note:** `setup` must be called at the beginning of the definition otherwise the default config will be used.
+
+```ruby
+class OrderDeSer < De::Ser::Ializer
+  setup do |config|
+    config.key_transform = :dasherize
+  end
+
+  integer    :id
+  timestamp  :created_at
+
+  nested     :items,       deser: OrderItemDeSer,   model_class: OrderItem
+  nested     :customer,    deser: CustomerDeSer,    model_class: Customer
+end
+```
+
 ### Sample Object
 
 ```ruby
@@ -183,17 +204,17 @@ json_string = OrderDeser.serialize_json(order)
 ```json
 {
   "id": 4,
-  "created-at": "2019-12-01T00:00:00.000-06:00",
+  "created_at": "2019-12-01T00:00:00.000-06:00",
   "items": [
     {
        "name": "Baseball",
        "decimal": "4.99",
-       "in-stock": true
+       "in_stock": true
      },
      {
        "name": "Football",
        "decimal": "14.99",
-       "in-stock": false
+       "in_stock": false
      }
   ],
   "customer": {
@@ -226,7 +247,7 @@ data = OrderDeSer.serialize([order, order2])
 
 ### Object Deserialization
 
-**Note:** Objects that are parsed must have a zero-argument initializer (ie: Object.new)
+**Note:** Objects that are parsed must have a zero argument initializer (ie: Object.new)
 
 #### Parsing a hash
 

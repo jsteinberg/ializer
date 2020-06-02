@@ -10,7 +10,7 @@ module Ializer
     # :key_transform=: key_transform
     #
     # symbol of string transform to call on field keys
-    # default is +:dasherize+.
+    # default is nil
     def key_transform=(key_transform)
       self.key_transformer = key_transform&.to_proc
     end
