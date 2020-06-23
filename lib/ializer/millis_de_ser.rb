@@ -12,6 +12,8 @@ module Ializer
       return nil if value.nil?
 
       Time.at(value / 1000.0)
+    rescue NoMethodError
+      value
     end
   end
 end
