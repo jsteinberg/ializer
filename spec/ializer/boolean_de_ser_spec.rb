@@ -13,11 +13,14 @@ RSpec.describe Ializer::BooleanDeSer do
   describe '#parse' do
     it 'parses values to boolean' do
       expect(described_class.parse(true)).to eq true
-      expect(described_class.parse(false)).to eq false
       expect(described_class.parse('true')).to eq true
+
+      expect(described_class.parse(false)).to eq false
       expect(described_class.parse('false')).to eq false
       expect(described_class.parse(1)).to eq false
       expect(described_class.parse('asdf')).to eq false
+
+      expect(described_class.parse(nil)).to eq false
     end
   end
 end

@@ -11,7 +11,7 @@ module Ializer
     def self.parse(value)
       DateTime.iso8601 value
     rescue ArgumentError
-      nil
+      value
     end
   end
 end

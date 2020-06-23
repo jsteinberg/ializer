@@ -10,6 +10,8 @@ module Ializer
       return nil if value.nil?
 
       value.to_sym
+    rescue NoMethodError
+      value
     end
   end
 end

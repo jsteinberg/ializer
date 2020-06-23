@@ -23,6 +23,8 @@ module Ializer
 
       return Float::INFINITY if value == INFINITY_STRING
 
+      return nil if value.nil?
+
       value.to_f
     end
   end

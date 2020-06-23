@@ -9,6 +9,8 @@ module Ializer
     def self.parse(value)
       return value if value.is_a? Numeric
 
+      return nil if value.nil?
+
       value.to_i
     end
   end

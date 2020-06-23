@@ -14,5 +14,9 @@ RSpec.describe Ializer::FixNumDeSer do
       expect(described_class.parse('4')).to eq 4
       expect(described_class.parse(4)).to eq 4
     end
+
+    it 'returns nil if value nil' do
+      expect(described_class.parse(nil)).to eq nil
+    end
   end
 end

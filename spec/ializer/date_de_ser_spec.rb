@@ -12,7 +12,9 @@ RSpec.describe Ializer::DateDeSer do
   describe '#parse' do
     it 'parses values to date' do
       expect(described_class.parse('2018-04-04')).to eq Date.new(2018, 4, 4)
-      expect(described_class.parse('asdf')).to eq nil
+
+      # parse failures
+      expect(described_class.parse('asdf')).to eq 'asdf'
       expect(described_class.parse(nil)).to eq nil
     end
   end

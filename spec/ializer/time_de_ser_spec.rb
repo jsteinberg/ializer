@@ -28,6 +28,8 @@ RSpec.describe Ializer::TimeDeSer do
 
       expect(described_class.parse(date_string)).to eq time
 
+      # parse failures
+      expect(described_class.parse('asdf')).to eq 'asdf'
       expect(described_class.parse(nil)).to eq nil
     end
   end
