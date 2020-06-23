@@ -14,6 +14,8 @@ module Ializer
       return nil if value.nil?
 
       BigDecimal(value)
+    rescue ArgumentError
+      value
     end
   end
 end

@@ -29,5 +29,9 @@ RSpec.describe Ializer::FloatDeSer do
       expect(described_class.parse('Infinity').infinite?).to eq 1
       expect(described_class.parse('-Infinity').infinite?).to eq(-1)
     end
+
+    it 'returns nil if value nil' do
+      expect(described_class.parse(nil)).to eq nil
+    end
   end
 end
