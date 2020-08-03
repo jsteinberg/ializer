@@ -292,7 +292,7 @@ class OrderDeSer < De::Ser::Ializer
 
   nested     :items,       deser: OrderItemDeSer,   model_class: OrderItem
   # OR
-  property   :items,       deser: OrderItemDeSer,   model_classx: OrderItem
+  property   :items,       deser: OrderItemDeSer,   model_class: OrderItem
 
   nested     :customer,    model_class: Customer do
     string     :name
