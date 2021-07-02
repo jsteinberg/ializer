@@ -152,7 +152,7 @@ module Ser
       end
 
       def serialize_one(object, context)
-        _attributes.values.each_with_object({}) do |field, data|
+        fields_for_serialization(context).each_with_object({}) do |field, data|
           next unless field.valid_for_context?(object, context)
 
           value = public_send(field.name, object, context)
@@ -161,6 +161,26 @@ module Ser
 
           data[field.key] = value
         end
+      end
+
+      def fields_for_serialization(context)
+        field_names = fields_names_for_serialization(context)
+
+        return _attributes.values unless field_names
+
+        _attributes.values_at(*field_names)
+      end
+
+      def fields_names_for_serialization(context) # rubocop:disable Metrics/CyclomaticComplexity
+        return nil unless context
+
+        if context.is_a?(Hash)
+          return context[:attributes] || context[:include] || context['attributes'] || context['include']
+        end
+
+        return context.attributes if context.respond_to?(:attributes)
+
+        nil
       end
 
       def valid_enumerable?(object)
