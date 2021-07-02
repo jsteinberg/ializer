@@ -21,7 +21,7 @@ RSpec.describe Ser::Ializer do
     end
 
     it 'serializes an array of attributes from hash context correctly' do
-      data = NamedMethodDeSer.serialize(order, attributes: %w[string-prop symbol-prop])
+      data = NamedMethodDeSer.serialize(order, attributes: %i[string-prop symbol-prop])
 
       expect(data.length).to eq 2
       expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
@@ -33,7 +33,7 @@ RSpec.describe Ser::Ializer do
       data = NamedMethodDeSer.serialize(order, include: %w[string-prop symbol-prop])
       expect(data.length).to eq 2
 
-      data = NamedMethodDeSer.serialize(order, 'include' => %w[string-prop symbol-prop])
+      data = NamedMethodDeSer.serialize(order, 'include' => %i[string-prop symbol-prop])
       expect(data.length).to eq 2
     end
 

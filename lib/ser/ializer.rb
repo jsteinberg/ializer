@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'active_support/hash_with_indifferent_access'
+require 'active_support/core_ext/hash'
+
 module Ser
   class Ializer # rubocop:disable Metrics/ClassLength
     @@method_registry = {} # rubocop:disable Style/ClassVars
@@ -111,7 +114,7 @@ module Ser
       def _attributes
         @attributes ||=
           if equal? Ser::Ializer
-            {}
+            ActiveSupport::HashWithIndifferentAccess.new
           else
             superclass._attributes.dup
           end
@@ -168,14 +171,15 @@ module Ser
 
         return _attributes.values unless field_names
 
-        _attributes.values_at(*field_names)
+        _attributes.values_at(*field_names).compact
       end
 
-      def fields_names_for_serialization(context) # rubocop:disable Metrics/CyclomaticComplexity
+      def fields_names_for_serialization(context)
         return nil unless context
 
         if context.is_a?(Hash)
-          return context[:attributes] || context[:include] || context['attributes'] || context['include']
+          context = context.with_indifferent_access
+          return context[:attributes] || context[:include]
         end
 
         return context.attributes if context.respond_to?(:attributes)
