@@ -458,6 +458,27 @@ end
 CustomerDeSer.serialize(order, current_user)
 ```
 
+#### Using the context to serialize a subset of attributes
+
+There are special keywords/method names on the Serialization Context that can be used to limit the attributes that are serialized.  This is different from conditional attributes below.  The conditions would still apply to the subset.
+
+If your serialization context is a `Hash`, you can use the hash keys `:attributes` or `:include` to define the limited subset of attributes for serialization.
+
+```ruby
+CustomerDeSer.serialize(order, attributes: [:name])
+```
+
+If your serialization context is a ruby object, a method named `attributes` that returns an array of attribute names can be used.
+
+```ruby
+class AttributeSubsetContext
+  attr_accessor :attributes
+end
+
+context = AttributeSubsetContext.new(attributes: [:name])
+CustomerDeSer.serialize(order, context)
+```
+
 ### Conditional Attributes
 
 Conditional attributes can be defined by passing a Proc to the `if` key on the `property` method. Return `truthy` if the attribute should be serialized, and `falsey` if not. The record and any params passed to the serializer are available inside the Proc as the first and second parameters, respectively.

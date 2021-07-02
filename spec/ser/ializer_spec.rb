@@ -20,6 +20,33 @@ RSpec.describe Ser::Ializer do
       expect(data['float-prop']).to     eq Ializer::FloatDeSer.serialize(order.float_prop)
     end
 
+    it 'serializes an array of attributes from hash context correctly' do
+      data = NamedMethodDeSer.serialize(order, attributes: %w[string-prop symbol-prop])
+
+      expect(data.length).to eq 2
+      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
+
+      data = NamedMethodDeSer.serialize(order, 'attributes' => %w[string-prop symbol-prop])
+      expect(data.length).to eq 2
+
+      data = NamedMethodDeSer.serialize(order, include: %w[string-prop symbol-prop])
+      expect(data.length).to eq 2
+
+      data = NamedMethodDeSer.serialize(order, 'include' => %w[string-prop symbol-prop])
+      expect(data.length).to eq 2
+    end
+
+    it 'serializes an array of attributes from context correctly' do
+      context = OpenStruct.new(attributes: %w[string-prop symbol-prop])
+
+      data = NamedMethodDeSer.serialize(order, context)
+
+      expect(data.length).to eq 2
+      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
+    end
+
     it 'serializes as a collection' do
       data = NamedMethodDeSer.serialize([order])
 
@@ -31,6 +58,19 @@ RSpec.describe Ser::Ializer do
       expect(obj_data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
       expect(obj_data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
       expect(obj_data['integer-prop']).to   eq Ializer::FixNumDeSer.serialize(order.integer_prop)
+    end
+
+    it 'serializes as a collection for attributes from hash context correctly' do
+      data = NamedMethodDeSer.serialize([order], attributes: %w[string-prop symbol-prop])
+
+      expect(data).to be_a Array
+      expect(data.length).to eq 1
+
+      obj_data = data[0]
+
+      expect(obj_data.length).to eq 2
+      expect(obj_data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop)
+      expect(obj_data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
     end
 
     it 'returns [] for empty collection' do
