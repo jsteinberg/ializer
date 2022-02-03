@@ -91,6 +91,7 @@ module Ser
         end
       end
 
+      # Maps a registered deser to the value type that it serializes
       def deser_types
         @deser_types ||= {}
       end

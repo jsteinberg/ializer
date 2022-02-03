@@ -326,4 +326,30 @@ RSpec.describe Ser::Ializer do
       ::Ializer.config.raise_on_default = false
     end
   end
+
+  describe 'attributes' do
+    it 'grants access to attributes' do
+      attributes = ItemDeSer.attributes
+      expect(attributes.count).to eq 2
+      expect(attributes.keys).to eq %w[name quantity]
+      expect(attributes['name'].deser).to eq Ializer::StringDeSer
+      expect(attributes['quantity'].deser).to eq Ializer::FixNumDeSer
+    end
+  end
+
+  describe 'deser_types' do
+    it 'maps all registered desers to their respective type' do
+      deser_types = described_class.deser_types
+      expect(deser_types['Ializer::BigDecimalDeSer']).to eq 'Decimal'
+      expect(deser_types['Ializer::BooleanDeSer']).to eq 'Boolean'
+      expect(deser_types['Ializer::DateDeSer']).to eq 'Date'
+      expect(deser_types['Ializer::DefaultDeSer']).to eq 'Json'
+      expect(deser_types['Ializer::FixNumDeSer']).to eq 'Integer'
+      expect(deser_types['Ializer::FloatDeSer']).to eq 'Float'
+      expect(deser_types['Ializer::MillisDeSer']).to eq 'Millis'
+      expect(deser_types['Ializer::StringDeSer']).to eq 'String'
+      expect(deser_types['Ializer::SymbolDeSer']).to eq 'Symbol'
+      expect(deser_types['Ializer::TimeDeSer']).to eq 'Timestamp'
+    end
+  end
 end
