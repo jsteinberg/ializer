@@ -335,6 +335,14 @@ RSpec.describe Ser::Ializer do
       expect(attributes['name'].deser).to eq Ializer::StringDeSer
       expect(attributes['quantity'].deser).to eq Ializer::FixNumDeSer
     end
+
+    describe 'field description' do
+      it 'parses the scription correctly' do
+        attributes = ItemDeSer.attributes
+        expect(attributes['name'].description).to eq 'Name of the item'
+        expect(attributes['quantity'].description).to eq 'Quantity of the item'
+      end
+    end
   end
 
   describe 'deser_types' do
