@@ -35,7 +35,7 @@ module De
         end
 
         def parse_attribute(object, key, value)
-          field = _attributes[key]
+          field = attributes[key]
 
           return unless field
 
@@ -77,7 +77,7 @@ module De
         end
 
         def parse_ostruct_field(object, key, value)
-          field = _attributes[key]
+          field = attributes[key]
 
           return unless field
 

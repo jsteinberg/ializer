@@ -47,7 +47,7 @@ module Ser
       end
 
       def with(deser)
-        deser._attributes.values.each do |field|
+        deser.attributes.values.each do |field|
           add_composed_attribute(field, deser)
         end
       end
@@ -76,6 +76,8 @@ module Ser
         matchers.each do |matcher|
           method_registry[matcher.to_s.to_sym] = method_name
         end
+
+        deser_types[deser.to_s] = method_name.capitalize
       end
 
       def register_default(deser)
@@ -89,8 +91,22 @@ module Ser
         end
       end
 
+      # Maps a registered deser to the value type that it serializes
+      def deser_types
+        @deser_types ||= {}
+      end
+
       def attribute_names
-        _attributes.values.map(&:name)
+        attributes.values.map(&:name)
+      end
+
+      def attributes
+        @attributes ||=
+          if equal? Ser::Ializer
+            ActiveSupport::HashWithIndifferentAccess.new
+          else
+            superclass.attributes.dup
+          end
       end
 
       protected
@@ -111,15 +127,6 @@ module Ser
         method(method_name)
       end
 
-      def _attributes
-        @attributes ||=
-          if equal? Ser::Ializer
-            ActiveSupport::HashWithIndifferentAccess.new
-          else
-            superclass._attributes.dup
-          end
-      end
-
       private
 
       def warning_message(name)
@@ -127,7 +134,7 @@ module Ser
       end
 
       def add_attribute(field)
-        _attributes[field.key] = field
+        attributes[field.key] = field
 
         define_singleton_method field.name do |object, context|
           value = field.get_value(object, context)
@@ -137,7 +144,7 @@ module Ser
       end
 
       def add_composed_attribute(field, deser)
-        _attributes[field.key] = field
+        attributes[field.key] = field
 
         define_singleton_method field.name do |object, context|
           deser.public_send(field.name, object, context)
@@ -169,9 +176,9 @@ module Ser
       def fields_for_serialization(context)
         field_names = fields_names_for_serialization(context)
 
-        return _attributes.values unless field_names
+        return attributes.values unless field_names
 
-        _attributes.values_at(*field_names).compact
+        attributes.values_at(*field_names).compact
       end
 
       def fields_names_for_serialization(context)
