@@ -20,7 +20,7 @@ module Ser
         @deser = options[:deser]
         @if_condition = options[:if]
         @model_class = options[:model_class]
-        @description = options[:desc] || options[:description]
+        @description = options[:desc]
         @block = block
       end
 
