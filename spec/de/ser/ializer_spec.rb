@@ -156,7 +156,7 @@ RSpec.describe De::Ser::Ializer do
 
       parsed = OverrideProperyDeSer.parse(data, TestOrder)
 
-      expect(parsed.string_prop).to     eq order.string_prop + '_override'
+      expect(parsed.string_prop).to     eq "#{order.string_prop}_override"
       expect(parsed.symbol_prop).to     eq order.symbol_prop
       expect(parsed.integer_prop).to    eq 106
     end
@@ -190,8 +190,8 @@ RSpec.describe De::Ser::Ializer do
 
       parsed = BaseCompositionDeSer.parse(data, TestOrder)
 
-      expect(parsed.string_prop).to    eq order.string_prop + '_override'
-      expect(parsed.symbol_prop).to    eq((order.symbol_prop.to_s + '_override').to_sym)
+      expect(parsed.string_prop).to    eq "#{order.string_prop}_override"
+      expect(parsed.symbol_prop).to    eq("#{order.symbol_prop}_override".to_sym)
       expect(parsed.integer_prop).to   eq nil
     end
 
@@ -200,8 +200,8 @@ RSpec.describe De::Ser::Ializer do
 
       parsed = CompositionDeSer.parse(data, TestOrder)
 
-      expect(parsed.string_prop).to    eq order.string_prop + '_override2'
-      expect(parsed.symbol_prop).to    eq((order.symbol_prop.to_s + '_override').to_sym)
+      expect(parsed.string_prop).to    eq "#{order.string_prop}_override2"
+      expect(parsed.symbol_prop).to    eq("#{order.symbol_prop}_override".to_sym)
       expect(parsed.integer_prop).to   eq order.integer_prop
     end
 
@@ -210,8 +210,8 @@ RSpec.describe De::Ser::Ializer do
         json = BaseCompositionDeSer.serialize_json(order)
 
         parsed = BaseCompositionDeSer.parse_json(json, TestOrder)
-        expect(parsed.string_prop).to    eq order.string_prop + '_override'
-        expect(parsed.symbol_prop).to    eq((order.symbol_prop.to_s + '_override').to_sym)
+        expect(parsed.string_prop).to    eq "#{order.string_prop}_override"
+        expect(parsed.symbol_prop).to    eq("#{order.symbol_prop}_override".to_sym)
         expect(parsed.integer_prop).to   eq nil
       end
     end
@@ -223,7 +223,7 @@ RSpec.describe De::Ser::Ializer do
 
       parsed = BlockDeSer.parse(data, TestOrder)
 
-      expect(parsed.string_prop).to    eq order.string_prop + '_block'
+      expect(parsed.string_prop).to    eq "#{order.string_prop}_block"
       expect(parsed.integer_prop).to   eq order.integer_prop + 1
     end
 
@@ -236,7 +236,7 @@ RSpec.describe De::Ser::Ializer do
       expect(parsed.customer).to be_present
       expect(parsed.customer).to be_a OpenStruct
 
-      expect(parsed.customer.name).to eq order.customer.name + '_block'
+      expect(parsed.customer.name).to eq "#{order.customer.name}_block"
       expect(parsed.customer.tele).to eq order.customer.tele
     end
 
@@ -248,7 +248,7 @@ RSpec.describe De::Ser::Ializer do
 
       expect(parsed.items.length).to eq 2
       expect(parsed.items.first).to be_a TestOrderItem
-      expect(parsed.items.first.name).to eq order.items[0].name + '_block'
+      expect(parsed.items.first.name).to eq "#{order.items[0].name}_block"
       expect(parsed.items.first.quantity).to eq order.items[0].quantity
     end
   end

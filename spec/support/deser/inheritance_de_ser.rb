@@ -7,7 +7,7 @@ end
 
 class CustomSymbolDeSer
   def self.serialize(value, _context = nil)
-    (value.to_s + '_custom').to_sym
+    "#{value}_custom".to_sym
   end
 
   def self.parse(value)

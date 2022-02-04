@@ -47,7 +47,7 @@ module Ser
       end
 
       def with(deser)
-        deser.attributes.values.each do |field|
+        deser.attributes.each_value do |field|
           add_composed_attribute(field, deser)
         end
       end

@@ -230,7 +230,7 @@ RSpec.describe Ser::Ializer do
     it 'serializes properties correctly' do
       data = OverrideProperyDeSer.serialize(order)
 
-      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop) + '_override'
+      expect(data['string-prop']).to    eq "#{Ializer::StringDeSer.serialize(order.string_prop)}_override"
       expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop)
       expect(data['integer-prop']).to   eq 106
     end
@@ -258,16 +258,16 @@ RSpec.describe Ser::Ializer do
     it 'serializes only base attributes' do
       data = BaseCompositionDeSer.serialize(order)
 
-      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop + '_override')
-      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop.to_s + '_override')
+      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize("#{order.string_prop}_override")
+      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize("#{order.symbol_prop}_override")
       expect(data).not_to have_key('integer-prop')
     end
 
     it 'serializes properties correctly' do
       data = CompositionDeSer.serialize(order)
 
-      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop + '_override2')
-      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop.to_s + '_override')
+      expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize("#{order.string_prop}_override2")
+      expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize("#{order.symbol_prop}_override")
       expect(data['integer-prop']).to   eq Ializer::FixNumDeSer.serialize(order.integer_prop)
     end
 
@@ -278,8 +278,8 @@ RSpec.describe Ser::Ializer do
         expect(json).to eq '{"string-prop":"string_override","symbol-prop":"symbol_override"}'
 
         data = JSON.parse(json)
-        expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize(order.string_prop + '_override')
-        expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize(order.symbol_prop.to_s + '_override')
+        expect(data['string-prop']).to    eq Ializer::StringDeSer.serialize("#{order.string_prop}_override")
+        expect(data['symbol-prop']).to    eq Ializer::SymbolDeSer.serialize("#{order.symbol_prop}_override")
       end
     end
   end
@@ -288,7 +288,7 @@ RSpec.describe Ser::Ializer do
     it 'serializes properties correctly' do
       data = BlockDeSer.serialize(order)
 
-      expect(data['string-prop']).to    eq order.string_prop + '_block'
+      expect(data['string-prop']).to    eq "#{order.string_prop}_block"
       expect(data['integer-prop']).to   eq order.integer_prop + 1
     end
 
@@ -298,7 +298,7 @@ RSpec.describe Ser::Ializer do
       data = BlockDeSer.serialize(order)
 
       expect(data['customer']).to be_present
-      expect(data['customer']['name']).to eq order.customer.name + '_block'
+      expect(data['customer']['name']).to eq "#{order.customer.name}_block"
       expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
     end
 
@@ -308,7 +308,7 @@ RSpec.describe Ser::Ializer do
       data = BlockDeSer.serialize(order)
 
       expect(data['items'].length).to eq 2
-      expect(data['items'][0]['name']).to eq order.items[0].name + '_block'
+      expect(data['items'][0]['name']).to eq "#{order.items[0].name}_block"
       expect(data['items'][0]['quantity']).to eq Ializer::FixNumDeSer.serialize(order.items[0].quantity)
     end
   end
