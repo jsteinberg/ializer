@@ -13,6 +13,9 @@ class NamedMethodDeSer < De::Ser::Ializer
   millis      :millis_prop
   float       :float_prop
 
-  nested      :customer,    deser: CustomerDeSer,   model_class: OpenStruct
-  nested      :items,       deser: ItemDeSer,       model_class: TestOrderItem
+  nested      :customer,
+              deser: CustomerDeSer,
+              model_class: OpenStruct,
+              documentation: { type: 'Customer' }
+  nested      :items, deser: ItemDeSer, model_class: TestOrderItem
 end

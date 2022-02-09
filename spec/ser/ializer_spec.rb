@@ -360,4 +360,13 @@ RSpec.describe Ser::Ializer do
       expect(deser_types['Ializer::TimeDeSer']).to eq 'Timestamp'
     end
   end
+
+  describe 'documentation' do
+    it 'stores documentation options in field' do
+      attributes = NamedMethodDeSer.attributes
+      customer_field = attributes['customer']
+      expect(customer_field.documentation).not_to be_nil
+      expect(customer_field.documentation[:type]).to eq 'Customer'
+    end
+  end
 end
