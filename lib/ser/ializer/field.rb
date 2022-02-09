@@ -11,7 +11,7 @@ module Ser
         end
       end
 
-      attr_reader :name, :setter, :key, :deser, :model_class, :if_condition, :block, :description
+      attr_reader :name, :setter, :key, :deser, :model_class, :if_condition, :block, :description, :documentation
 
       def initialize(name, options, config, &block)
         @name = name
@@ -21,6 +21,7 @@ module Ser
         @if_condition = options[:if]
         @model_class = options[:model_class]
         @description = options[:desc]
+        @documentation = options[:documentation]
         @block = block
       end
 
