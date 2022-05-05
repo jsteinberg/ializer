@@ -52,6 +52,14 @@ module De
 
         private
 
+        def add_attribute(field)
+          super
+
+          define_singleton_method field.setter do |object, parsed_value|
+            object.public_send(field.setter, parsed_value)
+          end
+        end
+
         def parse_field(object, field, value)
           return if value.nil?
 
@@ -59,7 +67,7 @@ module De
 
           return if parsed_value.nil?
 
-          object.public_send(field.setter, parsed_value)
+          public_send(field.setter, object, parsed_value)
         end
 
         def ostruct?(model_class)

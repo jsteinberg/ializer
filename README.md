@@ -427,6 +427,18 @@ class Customer < De::Ser::Ializer
 end
 ```
 
+Setters can also be overridden:
+
+```ruby
+class Customer < De::Ser::Ializer
+  string :name
+
+  def self.name=(object, value)
+    object.name = value.delete_suffix('Part 2')
+  end
+end
+```
+
 Attributes can also use a different name by passing the original method or accessor with a proc shortcut:
 
 ```ruby

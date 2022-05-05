@@ -29,3 +29,9 @@ end
 class CustomeSetterPropertyDeSer < PropertyDeSer
   property :string_prop, setter: :setter_string_prop
 end
+
+class OverriddenSetterPropertyDeSer < PropertyDeSer
+  def self.decimal_prop=(object, value)
+    object.decimal_prop = value * 2
+  end
+end

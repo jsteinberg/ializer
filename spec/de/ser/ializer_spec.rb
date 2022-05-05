@@ -142,6 +142,13 @@ RSpec.describe De::Ser::Ializer do
 
       expect(parsed.string_prop).to eq order.string_prop
     end
+
+    it 'parses using overridden setter' do
+      data = OverriddenSetterPropertyDeSer.serialize(order)
+      parsed = OverriddenSetterPropertyDeSer.parse(data, TestOrder)
+
+      expect(parsed.decimal_prop).to eq order.decimal_prop * 2
+    end
   end
 
   describe 'PropertySerializer' do
