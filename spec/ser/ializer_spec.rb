@@ -86,7 +86,7 @@ RSpec.describe Ser::Ializer do
 
       expect(data['customer']).to be_present
       expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
-      expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+      expect(data['customer']['tele']).to eq Ializer::StringDeSer.serialize(order.customer.tele)
     end
 
     it 'serializes nested array objects' do
@@ -140,7 +140,7 @@ RSpec.describe Ser::Ializer do
 
       expect(data['customer']).to be_present
       expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
-      expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+      expect(data['customer']['tele']).to eq Ializer::StringDeSer.serialize(order.customer.tele)
     end
 
     it 'does not serialize empty nested array objects' do
@@ -193,7 +193,7 @@ RSpec.describe Ser::Ializer do
 
       expect(data['customer']).to be_present
       expect(data['customer']['name']).to eq Ializer::StringDeSer.serialize(order.customer.name)
-      expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+      expect(data['customer']['tele']).to eq Ializer::StringDeSer.serialize(order.customer.tele)
     end
 
     describe 'attribute_names' do
@@ -299,7 +299,7 @@ RSpec.describe Ser::Ializer do
 
       expect(data['customer']).to be_present
       expect(data['customer']['name']).to eq "#{order.customer.name}_block"
-      expect(data['customer']['tele']).to eq Ializer::FixNumDeSer.serialize(order.customer.tele)
+      expect(data['customer']['tele']).to eq Ializer::StringDeSer.serialize(order.customer.tele)
     end
 
     it 'serializes nested array objects' do
