@@ -8,28 +8,20 @@ jobs:
 
     strategy:
       matrix:
-        ruby: [ '2.5.x', '2.6.x' ]
+        ruby: [ '2.7', '3.0', '3.1' ]
 
     name: Ruby ${{ matrix.ruby }}
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby ${{ matrix.ruby }}
-      uses: actions/setup-ruby@v1
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
 
     - name: Install bundler
       run: |
         gem install bundler
-
-    - name: Cache bundled gems
-      uses: actions/cache@v1
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-${{ matrix.ruby }}-gem-${{ hashFiles('**/ializer.gemspec') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.ruby }}-${{ hashFiles('**/ializer.gemspec') }}
-          ${{ runner.os }}-${{ matrix.ruby }}-
 
     - name: Bundle
       run: |
