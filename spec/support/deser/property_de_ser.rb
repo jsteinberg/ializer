@@ -11,6 +11,8 @@ class PropertyDeSer < De::Ser::Ializer
   property    :millis_prop,     type: :millis
   property    :float_prop,      type: Float
   property    :secret_prop,     type: String, if: ->(object, context) { PropertyDeSer.admin?(object, context) }
+  property    :array_prop,      type: :array
+  property    :json_prop,       type: :json
 
   nested      :customer,        deser: CustomerDeSer,   model_class: OpenStruct
   property    :items,           deser: ItemDeSer,       model_class: TestOrderItem
