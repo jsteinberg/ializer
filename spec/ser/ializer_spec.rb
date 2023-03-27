@@ -113,6 +113,8 @@ RSpec.describe Ser::Ializer do
       expect(data['timestamp-prop']).to eq Ializer::TimeDeSer.serialize(order.timestamp_prop)
       expect(data['millis-prop']).to    eq Ializer::MillisDeSer.serialize(order.millis_prop)
       expect(data['float-prop']).to     eq Ializer::FloatDeSer.serialize(order.float_prop)
+      expect(data['array-prop']).to     eq order.array_prop
+      expect(data['json-prop']).to      eq order.json_prop
     end
 
     it 'does not serialize admin props with no context' do

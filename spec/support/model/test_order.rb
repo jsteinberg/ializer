@@ -14,6 +14,8 @@ TestOrder = Struct.new(
   :millis_prop,
   :float_prop,
   :secret_prop,
+  :array_prop,
+  :json_prop,
   :customer,
   :items,
   keyword_init: true
@@ -31,6 +33,8 @@ TestOrder = Struct.new(
       millis_prop: timestamp,
       float_prop: 3.14,
       secret_prop: 'secret',
+      array_prop: %w[string1 string2],
+      json_prop: { 'key' => 'value' },
       items: []
   end
 

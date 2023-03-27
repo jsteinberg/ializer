@@ -316,21 +316,22 @@ end
 
 The following types are included with `ializer`
 
-| Type       | method alias | mappings                   |
-|------------|--------------|----------------------------|
-| BigDecimal | `decimal()`  | :BigDecimal, :decimal      |
-| Boolean    | `boolean()`  | :Boolean, :boolean         |
-| Date       | `date()`     | Date, :date                |
-| Integer    | `integer()`  | Integer, :integer          |
-| Float      | `float()`    | Float, :float              |
-| Time       | `millis()`   | :Millis, :millis           |
-| String     | `string()`   | String, :millis            |
-| Symbol     | `symbol()`   | Symbol, :symbol, :sym      |
-| Time       | `timestamp()`| Time, DateTime, :timestamp |
-| JSON       | `json()`     | :json                      |
-| Default    | `default()`  | :default                   |
+| Type       | method alias  | mappings                   |
+|------------|---------------|----------------------------|
+| BigDecimal | `decimal()`   | :BigDecimal, :decimal      |
+| Boolean    | `boolean()`   | :Boolean, :boolean         |
+| Date       | `date()`      | Date, :date                |
+| Integer    | `integer()`   | Integer, :integer          |
+| Float      | `float()`     | Float, :float              |
+| Time       | `millis()`    | :Millis, :millis           |
+| String     | `string()`    | String, :millis            |
+| Symbol     | `symbol()`    | Symbol, :symbol, :sym      |
+| Time       | `timestamp()` | Time, DateTime, :timestamp |
+| Array      | `array()`     | :array                     |
+| JSON       | `json()`      | :json                      |
+| Default    | `default()`   | :default                   |
 
-**Note: JSON/Default just uses the current value of the field and will only properly deserialize if it is a standard json value type(number, string, boolean).**
+**Note: Array/JSON/Default just uses the current value of the field and will only properly deserialize if it is a standard json value type(number, string, boolean).**
 
 #### Default Attribute Configuration Options
 

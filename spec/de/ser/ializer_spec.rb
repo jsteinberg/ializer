@@ -94,6 +94,8 @@ RSpec.describe De::Ser::Ializer do
       expect(parsed.float_prop).to     eq order.float_prop
       expect((parsed.timestamp_prop.to_f - order.timestamp_prop.to_f).abs).to be < 1
       expect((parsed.millis_prop.to_f - order.millis_prop.to_f).abs).to be < 1
+      expect(parsed.array_prop).to      eq order.array_prop
+      expect(parsed.json_prop).to       eq order.json_prop
     end
 
     it 'parses conditional props' do
