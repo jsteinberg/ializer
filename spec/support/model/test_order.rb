@@ -33,7 +33,7 @@ TestOrder = Struct.new(
       millis_prop: timestamp,
       float_prop: 3.14,
       secret_prop: 'secret',
-      array_prop: ['string1', 'string2'],
+      array_prop: %w[string1 string2],
       json_prop: { 'key' => 'value' },
       items: []
   end
