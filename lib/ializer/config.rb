@@ -53,6 +53,10 @@ module Ializer
     alias pagination_enabled? pagination_enabled
 
     ##
-    attr_accessor :page_number_key, :page_number_arg, :has_next_page_key, :has_next_page_arg
+    # :attr_accessor: page_info
+    #
+    # When serializing objects, return custom defined page info
+    # any of the methods defined should be able to be called on the hash or object passed as context to the .serialize_json method
+    attr_accessor :page_info
   end
 end

@@ -60,11 +60,9 @@ module Ser
 
         response = object.map { |o| serialize_one(o, context) }
 
-        return response unless config.pagination_enabled? || context.nil?
+        return response unless config.pagination_enabled? && context.present?
 
         pagination = page_info(context)
-
-        return response if pagination.nil?
 
         {
           data: response,
@@ -73,12 +71,16 @@ module Ser
       end
 
       def page_info(context)
-        return if context.nil?
-
-        {
-          config.page_number_key => context[config.page_number_arg],
-          config.has_next_page_key => context[config.has_next_page_arg]
-        }.compact
+        pagination_info = {}
+        config.page_info.each_key do |key|
+          pagination_info[key] =
+            if context.respond_to?(config.page_info[key])
+              context.send(config.page_info[key])
+            else
+              context[config.page_info[key]]
+            end
+        end
+        pagination_info
       end
 
       def serialize_json(object, context = nil)

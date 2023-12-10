@@ -75,7 +75,7 @@ RSpec.describe De::Ser::Ializer do
       expect(parsed.date_prop).to      eq nil
       expect(parsed.float_prop).to     eq nil
       expect(parsed.timestamp_prop).to eq nil
-      expect(parsed.millis_prop).to eq nil
+      expect(parsed.millis_prop).to    eq nil
     end
   end
 
