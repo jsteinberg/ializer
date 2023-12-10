@@ -43,5 +43,16 @@ module Ializer
     # default is +nil+.
     attr_accessor :raise_on_default
     alias raise_on_default? raise_on_default
+
+    ##
+    # :attr_accessor: pagination_enabled
+    #
+    # When serializing objects, return custom defined page info
+    # default is nil
+    attr_accessor :pagination_enabled
+    alias pagination_enabled? pagination_enabled
+
+    ##
+    attr_accessor :page_number_key, :page_number_arg, :has_next_page_key, :has_next_page_arg
   end
 end

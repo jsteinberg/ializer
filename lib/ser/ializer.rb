@@ -58,7 +58,27 @@ module Ser
 
         return [] if object.empty?
 
-        object.map { |o| serialize_one(o, context) }
+        response = object.map { |o| serialize_one(o, context) }
+
+        return response unless config.pagination_enabled? || context.nil?
+
+        pagination = page_info(context)
+
+        return response if pagination.nil?
+
+        {
+          data: response,
+          page_info: pagination
+        }
+      end
+
+      def page_info(context)
+        return if context.nil?
+
+        {
+          config.page_number_key => context[config.page_number_arg],
+          config.has_next_page_key => context[config.has_next_page_arg]
+        }.compact
       end
 
       def serialize_json(object, context = nil)
