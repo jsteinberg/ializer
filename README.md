@@ -274,7 +274,7 @@ Pagination will return the response in the following format:
     "page_info": { ... } // this is the same format as the page_info config
 }
 ```
-The page_info configuration will go through all the keys in the hash and call the method or if the method is unavailable it will return the value of the key with the same name, it can be either a symbol or a string
+The `page_info` configuration will go through all the keys in the hash and call the method or if the method is unavailable it will return the value of the key with the same name, it can be either a symbol or a string
 
 ## Attributes
 

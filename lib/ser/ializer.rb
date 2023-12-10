@@ -64,6 +64,8 @@ module Ser
 
         pagination = page_info(context)
 
+        return response if pagination == {}
+
         {
           data: response,
           page_info: pagination
