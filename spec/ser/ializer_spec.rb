@@ -371,4 +371,48 @@ RSpec.describe Ser::Ializer do
       expect(customer_field.documentation[:type]).to eq 'Customer'
     end
   end
+
+  describe 'pagination config' do
+    let(:orders) { [order] }
+
+    context 'when pagination is enabled' do
+      context 'when context has methods' do # rubocop:disable RSpec/NestedGroups
+        class PageInfo; end # rubocop:disable Lint/ConstantDefinitionInBlock, RSpec/LeakyConstantDeclaration
+
+        before do
+          allow(PageInfo).to receive(:page).and_return(3)
+        end
+
+        it 'returns the pagination config', :aggregate_failures do
+          Ializer.config.pagination_enabled = true
+          Ializer.config.page_info = { page_number: :page }
+          data = NamedMethodDeSer.serialize(orders, PageInfo)
+
+          expect(data.keys).to eq(%i[data page_info])
+          expect(data[:page_info]).to eq({ page_number: 3 })
+        end
+      end
+
+      context 'when pagination has hash' do # rubocop:disable RSpec/NestedGroups
+        it 'returns the pagination config', :aggregate_failures do
+          Ializer.config.pagination_enabled = true
+          Ializer.config.page_info = { page_number: :page }
+          data = NamedMethodDeSer.serialize(orders, page: 3)
+
+          expect(data.keys).to eq(%i[data page_info])
+          expect(data[:page_info]).to eq({ page_number: 3 })
+        end
+      end
+    end
+
+    context 'when pagination is not enabled' do
+      it "doesn't return page info" do
+        Ializer.config.pagination_enabled = nil
+        Ializer.config.page_info = { page_number: :page }
+        data = NamedMethodDeSer.serialize(orders, page: 3)
+
+        expect(data.count).to eq(1)
+      end
+    end
+  end
 end

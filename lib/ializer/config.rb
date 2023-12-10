@@ -43,5 +43,20 @@ module Ializer
     # default is +nil+.
     attr_accessor :raise_on_default
     alias raise_on_default? raise_on_default
+
+    ##
+    # :attr_accessor: pagination_enabled
+    #
+    # When serializing objects, return custom defined page info
+    # default is nil
+    attr_accessor :pagination_enabled
+    alias pagination_enabled? pagination_enabled
+
+    ##
+    # :attr_accessor: page_info
+    #
+    # When serializing objects, return custom defined page info
+    # any of the methods defined should be able to be called on the hash or object passed as context to the .serialize_json method
+    attr_accessor :page_info
   end
 end

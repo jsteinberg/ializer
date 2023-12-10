@@ -16,6 +16,7 @@ A fast serializer/deserializer for Ruby Objects.
   * [De/Serializer Configuration](#deserializer-configuration)
   * [Object Serialization](#object-serialization)
   * [Object Deserialization](#object-deserialization)
+  * [Pagination](#pagination)
 * [Attributes](#attributes)
   * [Nested Attributes](#nested-attributes)
   * [Attribute Types](#attribute-types)
@@ -67,6 +68,14 @@ Ializer.setup do |config|
   }
   config.warn_on_default = true # outputs a warning to STDOUT(puts) if DefaultDeSer is used
   config.raise_on_default = false # raises an exception if the DefaultDeSer is used
+  config.pagination_enabled = true # adds page_info to enummerable results
+  # N.B. page info is required if pagination is enabled, otherwise it will return an empty hash
+
+  # create custom page info keys that will read the object passed as context 
+  # in the following example we will return the page_number key from the value of either .page or [:page] of the context object
+  config.page_info = {
+    page_number: :page,
+  }
 end
 
 ```
@@ -256,6 +265,17 @@ model = OrderDeSer.parse(data, Order)
 
  => #<Order:0x00007f9e44aabd80 @id=4, @created_at=Sun, 01 Dec 2019 00:00:00 -0600, @items=[#<OrderItem:0x00007f9e44aab6f0 @name="Baseball", @in_stock=true, @price=0.499e1>, #<OrderItem:0x00007f9e44aab628 @name="Football", @in_stock=false, @price=0.1499e2>], @customer=#<Customer:0x00007f9e44aab498 @name="Bowser", @email="bowser@example.net">>
 ```
+
+### Pagination
+
+Pagination will return the response in the following format: 
+```json
+{
+    "data": [ ... ],
+    "page_info": { ... } // this is the same format as the page_info config
+}
+```
+The `page_info` configuration will go through all the keys in the hash and call the method or if the method is unavailable it will return the value of the key with the same name, it can be either a symbol or a string
 
 ## Attributes
 
