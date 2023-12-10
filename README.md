@@ -16,6 +16,7 @@ A fast serializer/deserializer for Ruby Objects.
   * [De/Serializer Configuration](#deserializer-configuration)
   * [Object Serialization](#object-serialization)
   * [Object Deserialization](#object-deserialization)
+  * [Pagination](#pagination)
 * [Attributes](#attributes)
   * [Nested Attributes](#nested-attributes)
   * [Attribute Types](#attribute-types)
